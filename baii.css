@@ -1,0 +1,261 @@
+:root {
+  --bg: #0e0e10;
+  --device: #1c1c1e;
+  --panel: #2c2c2e;
+  --row: #3a3a3c;
+  --row-2: #343436;
+  --accent: #ff9f0a;
+  --accent-h: #ffb340;
+  --green: #30d158;
+  --text: #ffffff;
+  --dim: #9a9aa0;
+  --line: #3f3f42;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  padding: 12px;
+}
+
+.device {
+  width: 100%;
+  max-width: 420px;
+  background: var(--device);
+  border-radius: 22px;
+  padding: 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 4px 4px 14px;
+}
+.brand__name { font-size: 1.35rem; font-weight: 700; letter-spacing: 0.5px; }
+.brand__sub { font-size: 0.85rem; color: var(--dim); }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 6px;
+  background: #131315;
+  padding: 5px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+.tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--dim);
+  font-size: 0.78rem;
+  padding: 9px 4px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.tab--active { background: var(--row); color: var(--text); }
+
+/* Panels */
+.panel { display: none; }
+.panel--active { display: block; animation: fade 0.18s ease; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.hint {
+  font-size: 0.78rem;
+  color: var(--dim);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.hint b { color: var(--accent); }
+
+/* Register rows (TVM + CF) */
+.reg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--row);
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 9px;
+}
+.reg label {
+  display: flex;
+  flex-direction: column;
+  width: 84px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.reg label small { font-size: 0.66rem; color: var(--dim); font-weight: 400; margin-top: 2px; }
+.reg input {
+  flex: 1;
+  min-width: 0;
+  background: #1b1b1d;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--text);
+  font-size: 1.15rem;
+  text-align: right;
+  padding: 9px 11px;
+}
+.reg input:focus { outline: none; border-color: var(--accent); }
+.reg input.computed { color: var(--green); border-color: var(--green); font-weight: 600; }
+
+.cpt {
+  border: none;
+  background: var(--accent);
+  color: #1c1c1e;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 9px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.cpt:active { background: var(--accent-h); }
+.cpt--wide { flex: 1; padding: 13px; font-size: 0.95rem; }
+
+/* Settings */
+.settings {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  margin: 12px 0;
+}
+.set {
+  flex: 1;
+  background: var(--row-2);
+  border-radius: 10px;
+  padding: 7px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.set label { font-size: 0.85rem; font-weight: 600; display: flex; flex-direction: column; }
+.set label small { font-size: 0.6rem; color: var(--dim); font-weight: 400; }
+.set input {
+  background: #1b1b1d;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 1rem;
+  text-align: right;
+  padding: 6px 8px;
+}
+.set input:focus { outline: none; border-color: var(--accent); }
+.mode {
+  border: none;
+  background: var(--row-2);
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mode[data-begin="true"] { background: var(--accent); color: #1c1c1e; }
+
+.clear, .add {
+  width: 100%;
+  border: none;
+  background: var(--row-2);
+  color: var(--text);
+  font-size: 0.9rem;
+  padding: 12px;
+  border-radius: 11px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.add { margin-bottom: 12px; color: var(--accent); }
+.clear:active, .add:active { background: var(--row); }
+
+/* Cash flow specifics */
+.reg--cf label { width: 110px; }
+.cf-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--row);
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 9px;
+}
+.cf-row .cf-name { width: 44px; font-weight: 600; font-size: 0.95rem; }
+.cf-row .cf-amount { flex: 1; min-width: 0; }
+.cf-row .cf-freq { width: 64px; }
+.cf-row input {
+  background: #1b1b1d;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1rem;
+  text-align: right;
+  padding: 8px 9px;
+  min-width: 0;
+}
+.cf-row input:focus { outline: none; border-color: var(--accent); }
+.cf-row .cf-freq::placeholder { color: var(--dim); }
+.cf-del {
+  border: none;
+  background: #4a2326;
+  color: #ff6b6b;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  flex: none;
+}
+.cf-actions { display: flex; gap: 8px; margin: 4px 0 12px; }
+.cf-result {
+  background: #131315;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: right;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--green);
+  word-break: break-all;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Standard calculator */
+.calc-display {
+  background: #131315;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: right;
+  margin-bottom: 12px;
+}
+.calc-display__history { color: var(--dim); font-size: 1rem; min-height: 1.2rem; word-break: break-all; }
+.calc-display__current { font-size: 2.6rem; font-weight: 300; word-break: break-all; }
+
+.keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+.key {
+  height: 58px;
+  border: none;
+  border-radius: 14px;
+  background: var(--row);
+  color: var(--text);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.key:active { filter: brightness(1.3); }
+.key--func { background: #5a5a5e; }
+.key--op { background: var(--accent); color: #fff; }
+.key--op.active { background: #fff; color: var(--accent); }
+.key--equals { background: var(--accent); }
+
+.foot { text-align: center; color: var(--dim); font-size: 0.7rem; padding-top: 14px; }

@@ -2,46 +2,129 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>计算器 Calculator</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#1c1c1e" />
+  <title>BA II Plus · CFA 金融计算器</title>
+  <link rel="stylesheet" href="baii.css" />
 </head>
 <body>
-  <main class="calculator" role="application" aria-label="计算器">
-    <!-- Display: shows the running expression and the current result -->
-    <section class="display">
-      <div class="display__history" id="history" aria-live="polite"></div>
-      <div class="display__current" id="current" aria-live="assertive">0</div>
+  <main class="device">
+    <header class="brand">
+      <span class="brand__name">BA II Plus</span>
+      <span class="brand__sub">CFA 金融计算器</span>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs" role="tablist">
+      <button class="tab tab--active" data-tab="tvm" role="tab">TVM 货币时间价值</button>
+      <button class="tab" data-tab="cf" role="tab">现金流 NPV/IRR</button>
+      <button class="tab" data-tab="calc" role="tab">标准计算</button>
+    </nav>
+
+    <!-- ===================== TVM ===================== -->
+    <section class="panel panel--active" id="panel-tvm">
+      <p class="hint">填入已知的 4 个值，点对应行的 <b>CPT</b> 求第 5 个。现金流入为正、流出为负。</p>
+
+      <div class="reg" data-key="N">
+        <label>N<small>期数</small></label>
+        <input type="text" inputmode="decimal" data-field="N" placeholder="0" />
+        <button class="cpt" data-cpt="N">CPT</button>
+      </div>
+      <div class="reg" data-key="IY">
+        <label>I/Y<small>年利率 %</small></label>
+        <input type="text" inputmode="decimal" data-field="IY" placeholder="0" />
+        <button class="cpt" data-cpt="IY">CPT</button>
+      </div>
+      <div class="reg" data-key="PV">
+        <label>PV<small>现值</small></label>
+        <input type="text" inputmode="decimal" data-field="PV" placeholder="0" />
+        <button class="cpt" data-cpt="PV">CPT</button>
+      </div>
+      <div class="reg" data-key="PMT">
+        <label>PMT<small>每期付款</small></label>
+        <input type="text" inputmode="decimal" data-field="PMT" placeholder="0" />
+        <button class="cpt" data-cpt="PMT">CPT</button>
+      </div>
+      <div class="reg" data-key="FV">
+        <label>FV<small>终值</small></label>
+        <input type="text" inputmode="decimal" data-field="FV" placeholder="0" />
+        <button class="cpt" data-cpt="FV">CPT</button>
+      </div>
+
+      <div class="settings">
+        <div class="set">
+          <label>P/Y<small>每年付款次数</small></label>
+          <input type="text" inputmode="numeric" data-field="PY" value="1" />
+        </div>
+        <div class="set">
+          <label>C/Y<small>每年复利次数</small></label>
+          <input type="text" inputmode="numeric" data-field="CY" value="1" />
+        </div>
+        <button class="mode" id="bgnToggle" data-begin="false">END 期末</button>
+      </div>
+
+      <button class="clear" id="clearTvm">清除 TVM</button>
     </section>
 
-    <!-- Keypad -->
-    <div class="keys">
-      <button type="button" class="key key--func" data-action="clear">AC</button>
-      <button type="button" class="key key--func" data-action="delete">DEL</button>
-      <button type="button" class="key key--func" data-action="percent">%</button>
-      <button type="button" class="key key--op" data-op="/">÷</button>
+    <!-- ===================== Cash Flow ===================== -->
+    <section class="panel" id="panel-cf">
+      <p class="hint">输入各期现金流；F 为该现金流连续出现的次数。NPV 用的 I 为<b>每期</b>折现率(%)。</p>
 
-      <button type="button" class="key" data-num="7">7</button>
-      <button type="button" class="key" data-num="8">8</button>
-      <button type="button" class="key" data-num="9">9</button>
-      <button type="button" class="key key--op" data-op="*">×</button>
+      <div class="reg reg--cf">
+        <label>CF0<small>初始现金流</small></label>
+        <input type="text" inputmode="decimal" data-cf0 placeholder="0" />
+      </div>
 
-      <button type="button" class="key" data-num="4">4</button>
-      <button type="button" class="key" data-num="5">5</button>
-      <button type="button" class="key" data-num="6">6</button>
-      <button type="button" class="key key--op" data-op="-">−</button>
+      <div id="cfList"></div>
+      <button class="add" id="addCf">＋ 添加现金流</button>
 
-      <button type="button" class="key" data-num="1">1</button>
-      <button type="button" class="key" data-num="2">2</button>
-      <button type="button" class="key" data-num="3">3</button>
-      <button type="button" class="key key--op" data-op="+">+</button>
+      <div class="reg reg--cf">
+        <label>I<small>每期折现率 %</small></label>
+        <input type="text" inputmode="decimal" id="cfRate" placeholder="0" />
+      </div>
 
-      <button type="button" class="key key--zero" data-num="0">0</button>
-      <button type="button" class="key" data-num=".">.</button>
-      <button type="button" class="key key--equals" data-action="equals">=</button>
-    </div>
+      <div class="cf-actions">
+        <button class="cpt cpt--wide" id="computeNpv">CPT NPV</button>
+        <button class="cpt cpt--wide" id="computeIrr">CPT IRR</button>
+      </div>
+      <div class="cf-result" id="cfResult">—</div>
+    </section>
+
+    <!-- ===================== Standard calculator ===================== -->
+    <section class="panel" id="panel-calc">
+      <div class="calc-display">
+        <div class="calc-display__history" id="calcHistory"></div>
+        <div class="calc-display__current" id="calcCurrent">0</div>
+      </div>
+      <div class="keys">
+        <button class="key key--func" data-action="clear">AC</button>
+        <button class="key key--func" data-action="delete">DEL</button>
+        <button class="key key--func" data-action="percent">%</button>
+        <button class="key key--op" data-op="/">÷</button>
+        <button class="key" data-num="7">7</button>
+        <button class="key" data-num="8">8</button>
+        <button class="key" data-num="9">9</button>
+        <button class="key key--op" data-op="*">×</button>
+        <button class="key" data-num="4">4</button>
+        <button class="key" data-num="5">5</button>
+        <button class="key" data-num="6">6</button>
+        <button class="key key--op" data-op="-">−</button>
+        <button class="key" data-num="1">1</button>
+        <button class="key" data-num="2">2</button>
+        <button class="key" data-num="3">3</button>
+        <button class="key key--op" data-op="+">+</button>
+        <button class="key" data-num="0">0</button>
+        <button class="key" data-num=".">.</button>
+        <button class="key" data-action="sign">±</button>
+        <button class="key key--equals" data-action="equals">=</button>
+      </div>
+    </section>
+
+    <footer class="foot">纯前端 · 数据不离开本机</footer>
   </main>
 
-  <script src="calculator.js"></script>
+  <script src="baii-core.js"></script>
+  <script src="baii-ui.js"></script>
 </body>
 </html>
